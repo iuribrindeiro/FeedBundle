@@ -11,13 +11,16 @@
 namespace MauticPlugin\FeedBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
+use Mautic\EmailBundle\Entity\Email;
 use Mautic\LeadBundle\Entity\LeadList;
+use MauticPlugin\FeedBundle\Entity\Feed;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FeedType extends AbstractType
 {
@@ -47,7 +50,7 @@ class FeedType extends AbstractType
                 ]
             )->add(
                 'urlFeed',
-                UrlType::class,
+                TextType::class,
                 [
                     'attr' => [
                         'value' => $options['data']->getUrlFeed(),
@@ -61,17 +64,7 @@ class FeedType extends AbstractType
                 'leadLists',
                 EntityType::class,
                 [
-                    'attr' => [
-                        'class' => LeadList::class,
-                        'value' => $options['data']['name']
-                    ],
-                    'required' => true
-                ]
-            )->add(
-                'segments',
-                EntityType::class,
-                [
-                    'class' => 'LeadBundle:LeadList',
+                    'class' => LeadList::class,
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('s')
                             ->orderBy('s.id', 'ASC');
@@ -79,7 +72,7 @@ class FeedType extends AbstractType
                     'multiple' => true,
                     'label' => 'Segmentos',
                     'label_attr' => ['class' => 'control-label'],
-                    'choice_label' => 'Segments',
+                    'choice_label' => 'Name',
                     'required' => true,
                 ]
             )
@@ -87,7 +80,7 @@ class FeedType extends AbstractType
                 'email',
                 EntityType::class,
                 [
-                    'class' => 'EmailBundle:Email',
+                    'class' => Email::class,
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('e')
                             ->orderBy('e.id', 'ASC');
@@ -100,6 +93,13 @@ class FeedType extends AbstractType
             );
 
         $builder->add('buttons', 'form_buttons');
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $optionsResolver)
+    {
+        $optionsResolver->setDefaults([
+            Feed::class
+        ]);
     }
 
     public function getName()

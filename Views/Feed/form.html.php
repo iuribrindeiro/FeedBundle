@@ -25,7 +25,10 @@ $view['slots']->set('headerTitle', $header);
         <div class="pa-md">
             <div class="row">
                 <div class="col-md-6">
-                    <?php echo $view['form']->row($form['name']); ?>
+                    <?php
+                    echo $view['form']->row($form['name']);
+                    echo $view['form']->row($form['urlFeed']);
+                    ?>
                 </div>
             </div>
         </div>

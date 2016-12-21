@@ -48,8 +48,7 @@ class FeedRepository extends CommonRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('f')
-            ->from('FeedBundle:Feed', 'f')
-            ->where($qb->expr()->isNotNull('f.lastSend'));
+            ->from('FeedBundle:Feed', 'f');
 
         $result = $qb->getQuery()->getResult();
 

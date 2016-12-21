@@ -74,6 +74,7 @@ class FeedModel extends CommonFormModel
             if ($objFeed->getLastSend()) {
                 $feeds = $feedIo->readSince($objFeed->getUrlFeed(), $objFeed->getLastSend());
             } else {
+                $onlyOne = true;
                 $feeds = $feedIo->read($objFeed->getUrlFeed())->getFeed();
             }
 
@@ -129,23 +130,14 @@ class FeedModel extends CommonFormModel
 
     public function sendFeed()
     {
-        $objFeedsNeverSent = $this->getRepository()->getFeedsNotSend();
-
-        $objFeeds = $this->getRepository()->getFeeds();
+        $feeds = $this->getRepository()->getFeeds();
 
         try {
-            $noticiasEnviadas = false;
-            if(count($objFeeds) > 0) {
-                $result = $this->sendEmailFeed($objFeeds);
-                $noticiasEnviadas = $result;
+            if(count($feeds) > 0) {
+                $result = $this->sendEmailFeed($feeds);
+                return $result;
             }
-            if(count($objFeedsNeverSent) > 0) {
-                $result = $this->sendEmailFeed($objFeeds);
-                if(!$noticiasEnviadas) {
-                    return $result;
-                }
-            }
-            return $noticiasEnviadas;
+            return null;
         } catch (\Exception $ex) {
             $this->logger->addError(
                 $ex->getMessage(),
