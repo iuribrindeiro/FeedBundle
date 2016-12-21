@@ -44,7 +44,7 @@ class TriggerFeedCommand extends ModeratedCommand
         }elseif($envio === false) {
             $output->writeln('<error>Erro ao enviar o feed</error>');
         }else {
-            $output->writeln('<info>Sem novas noticias</info>');
+            $output->writeln('<info>Não existem novas noticias</info>');
         }
         try {
             $this->completeRun();

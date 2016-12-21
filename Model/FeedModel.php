@@ -71,10 +71,9 @@ class FeedModel extends CommonFormModel
         /** @var Feed[] $objFeeds */
         foreach($objFeeds as $objFeed) {
             $onlyOne = false;
-            if (!$objFeed->getLastSend()) {
+            if ($objFeed->getLastSend()) {
                 $feeds = $feedIo->readSince($objFeed->getUrlFeed(), $objFeed->getLastSend());
             } else {
-                $onlyOne = true;
                 $feeds = $feedIo->read($objFeed->getUrlFeed())->getFeed();
             }
 
@@ -100,12 +99,8 @@ class FeedModel extends CommonFormModel
                     }
                 }
                 $feedsToSendEmail[] = $feed;
-                if($onlyOne) {
-                    $onlyOne = false;
-                    continue;
-                }
 
-                if(!$onlyOne) {
+                if($onlyOne) {
                     break;
                 }
             }

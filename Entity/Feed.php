@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Mautic\CoreBundle\Doctrine\Mapping\ClassMetadataBuilder;
 use Mautic\EmailBundle\Entity\Email;
+
 use Mautic\EmailBundle\Entity\Stat;
 use Mautic\LeadBundle\Entity\LeadList;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -42,6 +43,7 @@ class Feed
 
         $builder->addNamedField('name', 'string', 'name');
         $builder->addNamedField('urlFeed', 'string', 'url_feed');
+
         $builder->addNamedField('lastSend', 'datetime', 'last_send', true);
 
         $builder->createManyToMany('leadLists', LeadList::class)
@@ -172,7 +174,7 @@ class Feed
     }
 
     /**
-     * @return Email
+     * @return mixed
      */
     public function getEmail()
     {

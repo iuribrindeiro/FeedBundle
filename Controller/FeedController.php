@@ -10,13 +10,7 @@
 
 namespace MauticPlugin\FeedBundle\Controller;
 
-use FeedIo\Factory;
-use FeedIo\Reader\Result;
-use Mautic\CampaignBundle\Model\CampaignModel;
-use Mautic\CoreBundle\Controller\CommonController;
 use Mautic\CoreBundle\Controller\FormController;
-use Mautic\LeadBundle\Entity\Lead;
-use MauticPlugin\FeedBundle\Entity\Article;
 use MauticPlugin\FeedBundle\Model\FeedModel;
 use Symfony\Component\Form\FormError;
 
