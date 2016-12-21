@@ -11,17 +11,13 @@
 namespace MauticPlugin\FeedBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
-use Mautic\CoreBundle\Form\EventListener\FormExitSubscriber;
-use Mautic\EmailBundle\Entity\Email;
 use Mautic\LeadBundle\Entity\LeadList;
-use MauticPlugin\FeedBundle\Entity\Feed;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FeedType extends AbstractType
 {

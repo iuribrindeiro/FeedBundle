@@ -9,20 +9,11 @@
  * @license     GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 $view->extend('MauticCoreBundle:Default:content.html.php');
-<<<<<<< HEAD
 $view['slots']->set('mauticContent', 'feed');
 
 $header = ($entity->getId()) ?
     'Editar Feed ' . $entity->getName() :
     'Novo Feed';
-=======
-$view['slots']->set('mauticContent', 'campaign');
-
-$header = ($entity->getId()) ?
-    $view['translator']->trans('mautic.campaign.menu.edit',
-        ['%name%' => $view['translator']->trans($entity->getName())]) :
-    $view['translator']->trans('mautic.campaign.menu.new');
->>>>>>> 64822f0fe8e02aea48fdb690a072c892cadbeac2
 $view['slots']->set('headerTitle', $header);
 ?>
 
@@ -32,25 +23,9 @@ $view['slots']->set('headerTitle', $header);
     <!-- container -->
     <div class="col-md-9 bg-auto height-auto bdr-r">
         <div class="pa-md">
-<<<<<<< HEAD
             <div class="row">
                 <div class="col-md-6">
                     <?php echo $view['form']->row($form['name']); ?>
-                    <?php echo $view['form']->row($form['urlFeed']); ?>
-=======
-            <?php if ($entity->getId() && $entity->isPublished()): ?>
-                <div class="alert alert-danger"><p><?php echo $view['translator']->trans('mautic.campaign.modify.warning'); ?></p></div>
-            <?php endif; ?>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <?php echo $view['form']->row($form['name']); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <?php echo $view['form']->row($form['description']); ?>
->>>>>>> 64822f0fe8e02aea48fdb690a072c892cadbeac2
                 </div>
             </div>
         </div>
@@ -58,28 +33,11 @@ $view['slots']->set('headerTitle', $header);
     <div class="col-md-3 bg-white height-auto">
         <div class="pr-lg pl-lg pt-md pb-md">
             <?php
-<<<<<<< HEAD
             echo $view['form']->row($form['leadLists']);
             echo $view['form']->row($form['email']);
-=======
-            echo $view['form']->row($form['category']);
-            echo $view['form']->row($form['isPublished']);
-            echo $view['form']->row($form['publishUp']);
-            echo $view['form']->row($form['publishDown']);
->>>>>>> 64822f0fe8e02aea48fdb690a072c892cadbeac2
             ?>
         </div>
     </div>
 </div>
 
 <?php echo $view['form']->end($form); ?>
-<<<<<<< HEAD
-=======
-<?php echo $view->render('MauticCampaignBundle:Campaign:builder.html.php', [
-    'campaignId'      => $form['sessionId']->vars['data'],
-    'campaignEvents'  => $campaignEvents,
-    'campaignSources' => $campaignSources,
-    'eventSettings'   => $eventSettings,
-    'canvasSettings'  => $entity->getCanvasSettings(),
-]); ?>
->>>>>>> 64822f0fe8e02aea48fdb690a072c892cadbeac2

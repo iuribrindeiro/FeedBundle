@@ -45,13 +45,8 @@ if ($tmpl == 'index') {
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'feed',
-<<<<<<< HEAD
                         'orderBy'    => 'f.leadLists',
                         'text'       => 'Segmentos',
-=======
-                        'orderBy'    => 'cat.title',
-                        'text'       => 'mautic.core.category',
->>>>>>> 64822f0fe8e02aea48fdb690a072c892cadbeac2
                         'class'      => 'visible-md visible-lg col-campaign-category',
                     ]
                 );
@@ -89,28 +84,14 @@ if ($tmpl == 'index') {
                     </td>
                     <td>
                         <div>
-<<<<<<< HEAD
-                            <a href="<?php echo $view['router']->path(
-                                'mautic_feed_action',
-                                ['objectAction' => 'view', 'objectId' => $item->getId()]
-=======
-                            <?php echo $view->render(
-                                'MauticCoreBundle:Helper:publishstatus_icon.html.php',
-                                [
-                                    'item'  => $item,
-                                    'model' => 'feed',
-                                ]
-                            ); ?>
                             <a href="<?php echo $view['router']->path(
                                 'mautic_feed_action',
                                 ['objectAction' => 'view', 'id' => $item->getId()]
->>>>>>> 64822f0fe8e02aea48fdb690a072c892cadbeac2
                             ); ?>" data-toggle="ajax">
                                 <?php echo $item->getName(); ?>
                             </a>
                         </div>
                     </td>
-<<<<<<< HEAD
                     <td>
                         <div>
                             <?php
@@ -120,8 +101,6 @@ if ($tmpl == 'index') {
                             ?>
                         </div>
                     </td>
-=======
->>>>>>> 64822f0fe8e02aea48fdb690a072c892cadbeac2
                     <td class="visible-md visible-lg"><?php echo $item->getId(); ?></td>
                 </tr>
             <?php endforeach; ?>
