@@ -6,6 +6,18 @@ return [
     'version'     => '2.1',
     'author'      => 'Iuri',
 
+
+    'menu' => [
+        'main' => [
+            'items' => [
+                'Feeds' => [
+                    'priority' => 4,
+                    'route' => 'mautic_feed_index',
+                    'iconClass' => 'fa-users'
+                ]
+            ]
+        ]
+    ],
     'routes' => [
         'main' => [
             'mautic_feed_index' => [
