@@ -3,9 +3,8 @@
 return [
     'name'        => 'Feed Bundle',
     'description' => 'Create a feed with a list of clients',
-    'version'     => '2.1',
+    'version'     => '2.2',
     'author'      => 'Iuri',
-
 
     'menu' => [
         'main' => [

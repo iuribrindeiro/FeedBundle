@@ -46,12 +46,12 @@ class Feed
 
         $builder->addNamedField('lastSend', 'datetime', 'last_send', true);
 
-        $builder->createManyToMany('leadLists', LeadList::class)
-            ->setJoinTable('feed_lead_list_xrfe')
-            ->setIndexBy('id')
-            ->addInverseJoinColumn('leadlist_id', 'id', false, false, 'CASCADE')
-            ->addJoinColumn('feed_id', 'id', false, false, 'CASCADE')
-            ->build();
+//        $builder->createManyToMany('leadLists', LeadList::class)
+//            ->setJoinTable('feed_lead_list_xrfe')
+//            ->setIndexBy('id')
+//            ->addInverseJoinColumn('leadlist_id', 'id', false, false, 'CASCADE')
+//            ->addJoinColumn('feed_id', 'id', false, false, 'CASCADE')
+//            ->build();
 
         $builder->createManyToOne('email', Email::class)
             ->mappedBy('id')

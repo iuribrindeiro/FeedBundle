@@ -40,7 +40,7 @@ class RelFeedLeadList
 
         $builder->createManyToOne('feed', Feed::class)
             ->inversedBy('id')
-            ->addJoinColumn('leadlist_id', 'id', false, false, 'CASCADE')
+            ->addJoinColumn('feed_id', 'id', false, false, 'CASCADE')
             ->build();
     }
 
