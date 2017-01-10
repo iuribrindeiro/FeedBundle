@@ -40,12 +40,12 @@ class Article
 
         $builder->addNamedField('title', 'string', 'title');
 
-//        $builder->createManyToMany('stats', Stat::class)
-//            ->setJoinTable('article_stat_xrfe')
-//            ->setIndexBy('id')
-//            ->addInverseJoinColumn('stat_id', 'id', true, false, 'CASCADE')
-//            ->addJoinColumn('article_id', 'id', false, false)
-//            ->build();
+        $builder->createManyToMany('stats', Stat::class)
+            ->setJoinTable('article_stat_xrfe')
+            ->setIndexBy('id')
+            ->addInverseJoinColumn('stat_id', 'id', true, false, 'CASCADE')
+            ->addJoinColumn('article_id', 'id', false, false)
+            ->build();
 
         $builder->createManyToOne('feed', Feed::class)
             ->inversedBy('feed')

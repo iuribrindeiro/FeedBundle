@@ -11,6 +11,7 @@ namespace MauticPlugin\FeedBundle\Entity;
 
 
 use Mautic\CoreBundle\Entity\CommonRepository;
+use Mautic\EmailBundle\Entity\Stat;
 
 class ArticleRepository extends CommonRepository 
 {

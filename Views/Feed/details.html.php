@@ -42,7 +42,8 @@ $view['slots']->set(
                     <div class="panel shd-none mb-0">
                         <table class="table table-bordered table-striped mb-0">
                             <tbody>
-                            <?php echo $view->render(
+                            <?php /** @var \MauticPlugin\FeedBundle\Entity\Feed $feed */
+                            echo $view->render(
                                 'MauticCoreBundle:Helper:details.html.php',
                                 ['entity' => $feed]
                             ); ?>
@@ -61,32 +62,35 @@ $view['slots']->set(
                     <div class="col-sm-12">
                         <div class="panel">
                             <div class="pa-md">
-                                <?php if($feed->getStatEmails()): ?>
-                                    <?php foreach($feed->getStatEmails() as $statEmail): ?>
-                                        <div class="tab-pane fade bdr-w-0 active in">
-                                            <ul class="list-group campaign-event-list">
-                                                <li class="list-group-item bg-auto bg-light-xs">
-                                                    <div class="progress-bar progress-bar-success" style="width: 100%"></div>
-                                                    <div class="box-layout">
-                                                        <div class="col-md-1 va-m">
-                                                            <h3>
-                                                                <span class="fa fa-rocket text-success"></span>
-                                                            </h3>
+                                <div class="tab-content pa-md">
+                                    <?php if($feed->getName()): ?>
+                                        <?php foreach($feed->getArticles() as $article): ?>
+                                            <div class="tab-pane fade bdr-w-0 active in">
+                                                <ul class="list-group campaign-event-list">
+                                                    <li class="list-group-item bg-auto bg-light-xs">
+                                                        <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+                                                        <div class="box-layout">
+                                                            <div class="col-md-1 va-m">
+                                                                <h3>
+                                                                    <span class="fa fa-rocket text-success"></span>
+                                                                </h3>
+                                                            </div>
+                                                            <div class="col-md-7 va-m">
+                                                                <h5 class="fw-sb text-primary mb-xs">
+                                                                    <?php /** @var \MauticPlugin\FeedBundle\Entity\Article $article */
+                                                                    echo $article->getTitle(); ?>
+                                                                </h5>
+                                                            </div>
+                                                            <div class="col-md-4 va-m text-right">
+                                                                <em class="text-white dark-sm">Emails</em>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-7 va-m">
-                                                            <h5 class="fw-sb text-primary mb-xs">
-                                                                <?php echo $statEmail->getEmailAddress(); ?>
-                                                            </h5>
-                                                        </div>
-                                                        <div class="col-md-4 va-m text-right">
-                                                            <em class="text-white dark-sm">Aberto em <?= $statEmail->get ?></em>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     </div>

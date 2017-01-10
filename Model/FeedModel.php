@@ -52,6 +52,16 @@ class FeedModel extends CommonFormModel
         return $this->em->getRepository('FeedBundle:Article');
     }
 
+    public function getArticlesByIdFeed($idFeed)
+    {
+        /** @var ArticleRepository $repoAticle */
+        $repoAticle = $this->em->getRepository(Article::class);
+
+        $articles = $repoAticle->getArticlesByFeed($idFeed);
+
+        return $articles;
+    }
+
     /**
      * @return FeedRepository
      */
@@ -72,7 +82,7 @@ class FeedModel extends CommonFormModel
         foreach($objFeeds as $objFeed) {
             $onlyOne = false;
             if ($objFeed->getLastSend()) {
-                $feeds = $feedIo->readSince($objFeed->getUrlFeed(), $objFeed->getLastSend());
+                $feeds = $feedIo->readSince($objFeed->getUrlFeed(), $objFeed->getLastSend())->getFeed();
             } else {
                 $onlyOne = true;
                 $feeds = $feedIo->read($objFeed->getUrlFeed())->getFeed();

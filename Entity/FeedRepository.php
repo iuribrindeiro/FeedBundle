@@ -43,6 +43,29 @@ class FeedRepository extends CommonRepository
 
     }
 
+    public function getFeedOrderByDateSent($idFeed)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('f')
+            ->from('FeedBundle:Feed', 'f')
+            ->innerJoin('FeedBundle:Article', 'a', 'WITH',
+                'a.feed = f.id')
+            ->innerJoin('FeedBundle:RelArticleStat', 'ras', 'WITH',
+                'ras.article = a.id')
+            ->innerJoin('MauticEmailBundle:Stat', 's', 'WITH',
+                's.id = ras.stat')
+            ->orderBy('s.dateSent', 'DESC')
+            ->where($qb->expr()->eq('f.id', ':idFeed'))
+            ->setParameter('idFeed', $idFeed);
+
+        $result = $qb->getQuery()->getResult();
+
+        if(count($result)) {
+            return reset($result);
+        }
+    }
+
     public function getFeeds()
     {
         $qb = $this->getEntityManager()->createQueryBuilder();

@@ -86,7 +86,7 @@ if ($tmpl == 'index') {
                         <div>
                             <a href="<?php echo $view['router']->path(
                                 'mautic_feed_action',
-                                ['objectAction' => 'view', 'id' => $item->getId()]
+                                ['objectAction' => 'view', 'objectId' => $item->getId()]
                             ); ?>" data-toggle="ajax">
                                 <?php echo $item->getName(); ?>
                             </a>
