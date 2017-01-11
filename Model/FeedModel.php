@@ -72,7 +72,6 @@ class FeedModel extends CommonFormModel
 
     public function sendEmailFeed(array $objFeeds)
     {
-        $feedIo = Factory::create()->getFeedIo();
         $newArticles = null;
 
         /** @var ArticleRepository $articleRepo */
@@ -80,15 +79,16 @@ class FeedModel extends CommonFormModel
 
         /** @var Feed[] $objFeeds */
         foreach($objFeeds as $objFeed) {
+            $feedIo = Factory::create()->getFeedIo();
             $onlyOne = false;
             if ($objFeed->getLastSend()) {
-                $feeds = $feedIo->readSince($objFeed->getUrlFeed(), $objFeed->getLastSend())->getFeed();
+                $feeds = $feedIo->readSince($objFeed->getUrlFeed(), $objFeed->getLastSend());
             } else {
                 $onlyOne = true;
-                $feeds = $feedIo->read($objFeed->getUrlFeed())->getFeed();
+                $feeds = $feedIo->read($objFeed->getUrlFeed());
             }
 
-            foreach ($feeds as $key => $feed) {
+            foreach ($feeds->getFeed() as $key => $feed) {
                 $newArticles = true;
                 /** @var Email $email */
                 $email = $objFeed->getEmail();
