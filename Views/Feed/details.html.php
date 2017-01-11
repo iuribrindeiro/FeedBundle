@@ -90,10 +90,10 @@ $view['slots']->set(
                                                         <div class="list-group-item bg-auto bg-light-xs hidden" data-id-article="<?= $article->getId() ?>" name="detalhes-article">
                                                             <?php /** @var \Mautic\EmailBundle\Entity\Stat $stat */
                                                             foreach($article->getStats() as $stat): ?>
-                                                                <?php if($stat->isRead()) {
-                                                                    $class = 'info';
-                                                                }elseif(isset($hits[$stat->getLead()->getId()])) {
+                                                                <?php if(isset($hits[$stat->getLead()->getId()])) {
                                                                     $class = 'success';
+                                                                }elseif($stat->isRead()) {
+                                                                    $class = 'info';
                                                                 }else {
                                                                     $class = 'warning';
                                                                 }?>
