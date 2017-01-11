@@ -132,6 +132,7 @@ class FeedModel extends CommonFormModel
 
                     }
                 }
+                unset($email); unset($dadosLeads); unset($objArticles);
             }
         }
 
