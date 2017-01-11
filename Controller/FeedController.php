@@ -10,7 +10,13 @@
 
 namespace MauticPlugin\FeedBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Mautic\CoreBundle\Controller\FormController;
+use Mautic\EmailBundle\Entity\Stat;
+use Mautic\EmailBundle\Model\EmailModel;
+use Mautic\PageBundle\Entity\Hit;
+use MauticPlugin\FeedBundle\Entity\Article;
+use MauticPlugin\FeedBundle\Entity\Feed;
 use MauticPlugin\FeedBundle\Model\FeedModel;
 use Symfony\Component\Form\FormError;
 
@@ -293,9 +299,35 @@ class FeedController extends FormController
         /** @var FeedModel $model */
         $model = $this->getModel('feed');
 
-
         $security = $this->get('mautic.security');
-        $entity   = $model->getRepository()->getFeedOrderByDateSent($objectId);
+        /** @var Feed $entity */
+        $entity   = $model->getEntity($objectId);
+
+
+        /** @var Article $article */
+        foreach($entity->getArticles() as $article) {
+            $articleDetails[$article->getId()]['emailsEnviados'] = count($article->getStats());
+            $countEmailsLids = 0;
+            $countEmailsClicados = 0;
+            /** @var Stat $stat */
+            foreach($article->getStats() as $stat) {
+                $result = $this->getModel('page')->getHitRepository()->findOneBy([
+                    'email' => $entity->getEmail()->getId(),
+                    'lead' => $stat->getLead()->getId()
+                ]);
+
+                if(count($result)) {
+                    $hits[$stat->getLead()->getId()]['hit'] = $result;
+                    $countEmailsClicados++;
+                }
+
+                if($stat->isRead()) {
+                    $countEmailsLids++;
+                }
+            }
+            $articleDetails[$article->getId()]['emailsLidos'] = $countEmailsLids;
+            $articleDetails[$article->getId()]['emailsClicados'] = $countEmailsClicados;
+        }
 
         $permissions = $security->isGranted(
             [
@@ -343,6 +375,8 @@ class FeedController extends FormController
             [
                 'viewParameters' => [
                     'feed'      => $entity,
+                    'hits' => isset($hits) ? $hits : null,
+                    'articleDetails' => isset($articleDetails) ? $articleDetails : null,
                     'permissions'   => $permissions,
                     'security'      => $security,
                     'dateRangeForm' => $dateRangeForm->createView(),

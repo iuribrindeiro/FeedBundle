@@ -68,7 +68,8 @@ $view['slots']->set(
                                             <div class="tab-pane fade bdr-w-0 active in">
                                                 <ul class="list-group campaign-event-list">
                                                     <li class="list-group-item bg-auto bg-light-xs">
-                                                        <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+                                                        <!-- depois fazer calculode quantos foram cc  -->
+<!--                                                        <div class="progress-bar progress-bar-success" style="width: 100%"></div>-->
                                                         <div class="box-layout">
                                                             <div class="col-md-1 va-m">
                                                                 <h3>
@@ -76,14 +77,39 @@ $view['slots']->set(
                                                                 </h3>
                                                             </div>
                                                             <div class="col-md-7 va-m">
-                                                                <h5 class="fw-sb text-primary mb-xs">
+                                                                <h5 style="cursor: pointer" data-id-article="<?= $article->getId() ?>"
+                                                                    name="hide-detalhes-article" class="fw-sb text-primary mb-xs">
                                                                     <?php /** @var \MauticPlugin\FeedBundle\Entity\Article $article */
                                                                     echo $article->getTitle(); ?>
                                                                 </h5>
+                                                                <em class="col-sm-2">Enviados: <?= isset($articleDetails[$article->getId()]['emailsEnviados']) ? $articleDetails[$article->getId()]['emailsEnviados'] : 0 ?></em>
+                                                                <em class="col-sm-2">Abertos: <?= isset($articleDetails[$article->getId()]['emailsLidos']) ? $articleDetails[$article->getId()]['emailsLidos'] : 0 ?></em>
+                                                                <em class="col-sm-2">Cliques: <?= isset($articleDetails[$article->getId()]['emailsClicados']) ? $articleDetails[$article->getId()]['emailsClicados'] : 0 ?></em>
                                                             </div>
-                                                            <div class="col-md-4 va-m text-right">
-                                                                <em class="text-white dark-sm">Emails</em>
-                                                            </div>
+                                                        </div>
+                                                        <div class="list-group-item bg-auto bg-light-xs hidden" data-id-article="<?= $article->getId() ?>" name="detalhes-article">
+                                                            <?php /** @var \Mautic\EmailBundle\Entity\Stat $stat */
+                                                            foreach($article->getStats() as $stat): ?>
+                                                                <div class="alert alert-<?= $stat->isRead() ? 'info' : isset($hits[$stat->getLead()->getId()]) ? 'succes' : 'warning' ?>">
+                                                                    <div class="col-sm-4">
+                                                                        <label>Cliente:</label>
+                                                                        <a href="<?php echo $view['router']->path(
+                                                                            'mautic_contact_action',
+                                                                            ['objectAction' => 'view', 'objectId' => $stat->getLead()->getId()]
+                                                                        ); ?>" data-toggle="ajax">
+                                                                            <?php echo $stat->getEmailAddress() ?>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="col-sm-4">
+                                                                        <label>Aberto:</label>
+                                                                        <?= $stat->isRead() ? 'Sim' : 'Não'?>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label>Acessado:</label>
+                                                                        <?= isset($hits[$stat->getLead()->getId()]) ? 'Sim' : 'Não' ?>
+                                                                    </div>
+                                                                </div>
+                                                            <?php endforeach; ?>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -101,4 +127,28 @@ $view['slots']->set(
     </div>
 
 </div>
+
+<script>
+    function clickDetalhesArticle() {
+
+    }
+    var elements = document.querySelectorAll('h5[name="hide-detalhes-article"]');
+
+    for(var element in elements) {
+        element = parseInt(element);
+        if(element >= 0) {
+            elements[element].onclick = function (e) {
+                var idArticle = this.getAttribute('data-id-article');
+                articleElements = document.querySelectorAll('div[name="detalhes-article"]');
+
+                for(var item in articleElements) {
+                    if(item >= 0) {
+                        articleElements[item].classList.add('hidden');
+                    }
+                }
+                document.querySelector('div[name="detalhes-article"][data-id-article="' + idArticle + '"]').classList.remove('hidden');
+            }
+        }
+    }
+</script>
 <!--/ end: box layout -->
