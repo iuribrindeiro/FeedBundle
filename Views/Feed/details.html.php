@@ -90,7 +90,14 @@ $view['slots']->set(
                                                         <div class="list-group-item bg-auto bg-light-xs hidden" data-id-article="<?= $article->getId() ?>" name="detalhes-article">
                                                             <?php /** @var \Mautic\EmailBundle\Entity\Stat $stat */
                                                             foreach($article->getStats() as $stat): ?>
-                                                                <div class="alert alert-<?= $stat->isRead() ? 'info' : isset($hits[$stat->getLead()->getId()]) ? 'succes' : 'warning' ?>">
+                                                                <?php if($stat->isRead()) {
+                                                                    $class = 'info';
+                                                                }elseif(isset($hits[$stat->getLead()->getId()])) {
+                                                                    $class = 'success';
+                                                                }else {
+                                                                    $class = 'warning';
+                                                                }?>
+                                                                <div class="alert alert-<?= $class  ?>">
                                                                     <div class="col-sm-4">
                                                                         <label>Cliente:</label>
                                                                         <a href="<?php echo $view['router']->path(
