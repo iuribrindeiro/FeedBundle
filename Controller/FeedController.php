@@ -396,4 +396,15 @@ class FeedController extends FormController
             ]
         );
     }
+
+    public function deleteAction($objectId)
+    {
+        /** @var FeedModel $model */
+        $model = $this->getModel('feed');
+        $entity = $model->getEntity($objectId);
+
+        if($entity) {
+            $model->deleteEntity($entity);
+        }
+    }
 }
