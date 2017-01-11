@@ -89,7 +89,6 @@ class FeedModel extends CommonFormModel
             }
 
             foreach ($feeds->getFeed() as $key => $feed) {
-                $newArticles = true;
                 /** @var Email $email */
                 $email = $objFeed->getEmail();
                 $email->setSubject($feed->getTitle());
@@ -117,6 +116,7 @@ class FeedModel extends CommonFormModel
             }
 
             if(isset($email) && isset($dadosLeads) && isset($objArticles)) {
+                $newArticles = true;
                 $email->setCustomHtml($this->engine->render('FeedBundle:Feed:email-feed.html.php', ['feeds' => $feedsToSendEmail]));
                 $this->emailModel->sendEmail($email, $dadosLeads, ['ignoreDNC' => true, 'sendBatchMail' => true]);
 
