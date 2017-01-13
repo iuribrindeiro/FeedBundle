@@ -114,15 +114,7 @@ $view['slots']->set(
                                                                     <div>
                                                                         <label>Acessado:</label>
                                                                         <?php if(isset($hits[$stat->getLead()->getId()])): ?>
-                                                                            <?php foreach($hits[$stat->getLead()->getId()]['hit'] as $key => $value):?>
-                                                                                <?php if(is_array($value)): ?>
-                                                                                    <?php foreach($value as $keyItem => $valueItem): ?>
-                                                                                        <?= $keyItem . ' AND ' . $valueItem ?>
-                                                                                    <?php endforeach; ?>
-                                                                                <?php elseif(is_string($value)): ?>
-                                                                                    <?= $key . ' AND ' . $value ?>
-                                                                                <?php endif; ?>
-                                                                            <?php endforeach;?>
+                                                                            <? var_dump($hits[$stat->getLead()->getId()]['hit']);?>
                                                                         <?php endif; ?>
                                                                     </div>
                                                                 </div>
