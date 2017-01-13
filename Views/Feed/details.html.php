@@ -118,7 +118,6 @@ $view['slots']->set(
                                                                                 <?= $key . ' and ' . $value ?>
                                                                             <?php endforeach;?>
                                                                         <?php endif; ?>
-                                                                        <?=  $hits[$stat->getLead()->getId()]['hit'] : $hits[$stat->getLead()->getId()]['hit'] ?>
                                                                     </div>
                                                                 </div>
                                                             <?php endforeach; ?>
