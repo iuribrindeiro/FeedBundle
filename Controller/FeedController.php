@@ -312,7 +312,7 @@ class FeedController extends FormController
             /** @var Stat $stat */
             foreach($article->getStats() as $stat) {
                 if($stat->getViewedInBrowser()) {
-                    $hits[$stat->getLead()->getId()]['hit'] = $stat->getViewedInBrowser();
+                    $hits[$stat->getLead()->getId()]['hit'] = $stat->getOpenDetails();
                     $countEmailsClicados++;
                 }
 
