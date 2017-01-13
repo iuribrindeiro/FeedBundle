@@ -311,13 +311,8 @@ class FeedController extends FormController
             $countEmailsClicados = 0;
             /** @var Stat $stat */
             foreach($article->getStats() as $stat) {
-                $result = $this->getModel('page')->getHitRepository()->findOneBy([
-                    'email' => $entity->getEmail()->getId(),
-                    'lead' => $stat->getLead()->getId()
-                ]);
-
-                if(count($result)) {
-                    $hits[$stat->getLead()->getId()]['hit'] = $result;
+                if($stat->getViewedInBrowser()) {
+                    $hits[$stat->getLead()->getId()]['hit'] = $stat->getViewedInBrowser();
                     $countEmailsClicados++;
                 }
 
