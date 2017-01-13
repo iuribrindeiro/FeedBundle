@@ -301,7 +301,7 @@ class FeedController extends FormController
 
         $security = $this->get('mautic.security');
         /** @var Feed $entity */
-        $entity   = $model->getRepository()->getFeedOrderByDateSent($objectId);
+        $entity   = $model->getRegetFeedOrderByDateSent($objectId);
 
 
         /** @var Article $article */
@@ -312,7 +312,7 @@ class FeedController extends FormController
             /** @var Stat $stat */
             foreach($article->getStats() as $stat) {
                 if($stat->getViewedInBrowser()) {
-                    $hits[$stat->getLead()->getId()]['hit'] = $stat->getOpenDetails();
+                    $hits[$stat->getLead()->getId()]['hit'] = $stat->getViewedInBrowser();
                     $countEmailsClicados++;
                 }
 
