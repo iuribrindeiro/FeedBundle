@@ -49,13 +49,9 @@ class FeedRepository extends CommonRepository
 
         $qb->select('f')
             ->from('FeedBundle:Feed', 'f')
-            ->innerJoin('FeedBundle:Article', 'a', 'WITH',
+            ->leftJoin('FeedBundle:Article', 'a', 'WITH',
                 'a.feed = f.id')
-            ->innerJoin('FeedBundle:RelArticleStat', 'ras', 'WITH',
-                'ras.article = a.id')
-            ->innerJoin('MauticEmailBundle:Stat', 's', 'WITH',
-                's.id = ras.stat')
-            ->orderBy('s.dateSent', 'DESC')
+            ->orderBy('a.dateSent', 'DESC')
             ->where($qb->expr()->eq('f.id', ':idFeed'))
             ->setParameter('idFeed', $idFeed);
 

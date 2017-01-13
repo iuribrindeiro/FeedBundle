@@ -93,7 +93,7 @@ class FeedModel extends CommonFormModel
                 $email = $objFeed->getEmail();
                 $email->setSubject($feed->getTitle());
 
-                $objArticles[] = (new Article())->setTitle($feed->getTitle())->setFeed($objFeed);
+                $objArticles[] = (new Article())->setTitle($feed->getTitle())->setFeed($objFeed)->setDateSent($feed->getLastModified());
 
                 foreach($objFeed->getLeadLists() as $leadList) {
                     /** @var ListLead $lead */

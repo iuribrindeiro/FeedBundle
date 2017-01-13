@@ -29,6 +29,9 @@ class Article
     /** @var  Feed */
     private $feed;
 
+    /** @var  \DateTime */
+    private $dateSent;
+
     public static function loadMetadata(ORM\ClassMetadata $metadata)
     {
         $builder = new ClassMetadataBuilder($metadata);
@@ -39,6 +42,8 @@ class Article
         $builder->addId();
 
         $builder->addNamedField('title', 'string', 'title');
+
+        $builder->addNamedField('dateSent', 'datetime', 'date_sent');
 
         $builder->createManyToMany('stats', Stat::class)
             ->setJoinTable('article_stat_xrfe')
@@ -122,6 +127,24 @@ class Article
     public function setStats($stats)
     {
         $this->stats = $stats;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateSent()
+    {
+        return $this->dateSent;
+    }
+
+    /**
+     * @param \DateTime $dateSent
+     * @return Article
+     */
+    public function setDateSent($dateSent)
+    {
+        $this->dateSent = $dateSent;
         return $this;
     }
 }

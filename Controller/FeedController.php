@@ -301,7 +301,7 @@ class FeedController extends FormController
 
         $security = $this->get('mautic.security');
         /** @var Feed $entity */
-        $entity   = $model->getEntity($objectId);
+        $entity   = $model->getRepository()->getFeedOrderByDateSent($objectId);
 
 
         /** @var Article $article */

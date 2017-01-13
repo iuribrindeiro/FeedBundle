@@ -12,9 +12,9 @@ class FeedBundle extends PluginBundleBase
 
     public static function onPluginUpdate(Plugin $plugin, MauticFactory $factory, $metadata = null, Schema $installedSchema = null)
     {
-//        if ($metadata !== null) {
-//            self::updatePluginSchema($metadata, $installedSchema, $factory);
-//        }
+        if ($metadata !== null) {
+            self::updatePluginSchema($metadata, $installedSchema, $factory);
+        }
     }
 
 }
