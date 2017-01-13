@@ -113,7 +113,7 @@ $view['slots']->set(
                                                                     </div>
                                                                     <div>
                                                                         <label>Acessado:</label>
-                                                                        <?= isset($hits[$stat->getLead()->getId()]) ? 'Sim' : 'Não' ?>
+                                                                        <?= isset($hits[$stat->getLead()->getId()]) ? $hits[$stat->getLead()->getId()] : $hits[$stat->getLead()->getId()] ?>
                                                                     </div>
                                                                 </div>
                                                             <?php endforeach; ?>
