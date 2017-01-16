@@ -321,7 +321,7 @@ class FeedController extends FormController
 
             foreach($trackables as $key => $link) {
                 if($article->getUrl() == $link['url']) {
-                    $countEmailsClicados += $link['unique_hits'];
+                    $countEmailsClicados += $link['unieque_hits'];
                     unset($trackables[$key]);
                     break;
                 }
@@ -379,6 +379,7 @@ class FeedController extends FormController
                     'feed'      => $entity,
                     'hits' => isset($hits) ? $hits : null,
                     'articleDetails' => isset($articleDetails) ? $articleDetails : null,
+                    'trackeables' => $trackables,
                     'permissions'   => $permissions,
                     'security'      => $security,
                     'dateRangeForm' => $dateRangeForm->createView(),

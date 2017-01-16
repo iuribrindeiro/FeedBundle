@@ -109,6 +109,10 @@ $view['slots']->set(
                                                                         <label>Aberto:</label>
                                                                         <?= $stat->isRead() ? 'Sim' : 'Não'?>
                                                                     </div>
+                                                                    <div>
+                                                                        <label>Teste:</label>
+                                                                        <?php var_dump($trackeables); ?>
+                                                                    </div>
                                                                 </div>
                                                             <?php endforeach; ?>
                                                         </div>
