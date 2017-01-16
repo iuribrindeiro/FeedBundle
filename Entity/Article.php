@@ -23,6 +23,9 @@ class Article
     /** @var  string */
     private $title;
 
+    /** @var  string */
+    private $url;
+
     /** @var  ArrayCollection */
     private $stats;
 
@@ -44,6 +47,8 @@ class Article
         $builder->addNamedField('title', 'string', 'title');
 
         $builder->addNamedField('dateSent', 'datetime', 'date_sent');
+
+        $builder->addNamedField('url', 'string', 'url');
 
         $builder->createManyToMany('stats', Stat::class)
             ->setJoinTable('article_stat_xrfe')
@@ -145,6 +150,24 @@ class Article
     public function setDateSent($dateSent)
     {
         $this->dateSent = $dateSent;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     * @return Article
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
         return $this;
     }
 }

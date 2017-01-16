@@ -302,7 +302,10 @@ class FeedController extends FormController
         $security = $this->get('mautic.security');
         /** @var Feed $entity */
         $entity   = $model->getRepository()->getFeedOrderByDateSent($objectId);
+        /** @var EmailModel $emailModel */
+        $emailModel = $this->getModel('email');
 
+        $trackables = $emailModel->getEmailClickStats($entity->getEmail()->getId());
 
         /** @var Article $article */
         foreach($entity->getArticles() as $article) {
@@ -311,15 +314,19 @@ class FeedController extends FormController
             $countEmailsClicados = 0;
             /** @var Stat $stat */
             foreach($article->getStats() as $stat) {
-                if(true) {
-                    $hits[$stat->getLead()->getId()]['hit'] = $stat->getOpenDetails();
-                    $countEmailsClicados++;
-                }
-
                 if($stat->isRead()) {
                     $countEmailsLids++;
                 }
             }
+
+            foreach($trackables as $key => $link) {
+                if($article->getUrl() == $link['url']) {
+                    $countEmailsClicados += $link['unique_hits'];
+                    unset($trackables[$key]);
+                    break;
+                }
+            }
+
             $articleDetails[$article->getId()]['emailsLidos'] = $countEmailsLids;
             $articleDetails[$article->getId()]['emailsClicados'] = $countEmailsClicados;
         }

@@ -40,4 +40,17 @@ class ArticleRepository extends CommonRepository
 
         return $result;
     }
+
+    public function getHitByEmailAndLead($emailId, $leadId)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('s')
+            ->from('MauticPageBundle:Hit', 'h')
+            ->innerJoin('MauticEmailBundle:Email', 'e', 'WITH',
+                'e.id = h.email')
+            ->innerJoin('')
+            ->where($qb->expr()->eq('h.email', ':emailId'))
+            ->andWhere($qb->expr()->eq('e.'));
+    }
 }

@@ -182,7 +182,7 @@ class Feed
     }
 
     /**
-     * @return mixed
+     * @return Email
      */
     public function getEmail()
     {

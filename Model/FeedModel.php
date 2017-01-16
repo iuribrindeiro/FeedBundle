@@ -88,12 +88,15 @@ class FeedModel extends CommonFormModel
                 $feeds = $feedIo->read($objFeed->getUrlFeed());
             }
 
+            /** @var \FeedIo\Feed $feed */
             foreach ($feeds->getFeed() as $key => $feed) {
                 /** @var Email $email */
                 $email = $objFeed->getEmail();
                 $email->setSubject($feed->getTitle());
 
-                $objArticles[] = (new Article())->setTitle($feed->getTitle())->setFeed($objFeed)->setDateSent($feed->getLastModified());
+                $objArticles[] = (new Article())->setTitle($feed->getTitle())
+                                    ->setFeed($objFeed)->setDateSent($feed->getLastModified())
+                                    ->setUrl($feed->getUrl());
 
                 foreach($objFeed->getLeadLists() as $leadList) {
                     /** @var ListLead $lead */

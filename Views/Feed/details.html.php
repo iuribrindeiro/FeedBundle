@@ -90,10 +90,8 @@ $view['slots']->set(
                                                         <div class="list-group-item bg-auto bg-light-xs hidden" data-id-article="<?= $article->getId() ?>" name="detalhes-article">
                                                             <?php /** @var \Mautic\EmailBundle\Entity\Stat $stat */
                                                             foreach($article->getStats() as $stat): ?>
-                                                                <?php if(isset($hits[$stat->getLead()->getId()])) {
+                                                                <?php if($stat->isRead()) {
                                                                     $class = 'success';
-                                                                }elseif($stat->isRead()) {
-                                                                    $class = 'info';
                                                                 }else {
                                                                     $class = 'warning';
                                                                 }?>
@@ -107,15 +105,9 @@ $view['slots']->set(
                                                                             <?php echo $stat->getEmailAddress() ?>
                                                                         </a>
                                                                     </div>
-                                                                    <div class="col-sm-4">
+                                                                    <div>
                                                                         <label>Aberto:</label>
                                                                         <?= $stat->isRead() ? 'Sim' : 'Não'?>
-                                                                    </div>
-                                                                    <div>
-                                                                        <label>Acessado:</label>
-                                                                        <?php if(isset($hits[$stat->getLead()->getId()])): ?>
-                                                                            <? var_dump($hits[$stat->getLead()->getId()]['hit']);?>
-                                                                        <?php endif; ?>
                                                                     </div>
                                                                 </div>
                                                             <?php endforeach; ?>
@@ -148,6 +140,12 @@ $view['slots']->set(
         if(element >= 0) {
             elements[element].onclick = function (e) {
                 var idArticle = this.getAttribute('data-id-article');
+
+                if(!document.querySelector('div[name="detalhes-article"][data-id-article="' + idArticle + '"]').classList.contains('hidden')) {
+                    document.querySelector('div[name="detalhes-article"][data-id-article="' + idArticle + '"]').classList.add('hidden');
+                    return;
+                }
+
                 articleElements = document.querySelectorAll('div[name="detalhes-article"]');
 
                 for(var item in articleElements) {
