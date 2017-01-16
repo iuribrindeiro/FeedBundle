@@ -240,7 +240,7 @@ class FeedController extends FormController
                                 'objectId'     => $entity->getId(),
                             ];
                             $returnUrl = $this->generateUrl('mautic_feed_action', $viewParameters);
-                            $template  = 'FeedBundle:Campaign:view';
+                            $template  = 'FeedBundle:Feed:view';
                         } else {
                             //return edit view so that all the session stuff is loaded
                             return $this->editAction($entity->getId(), true);
@@ -261,8 +261,8 @@ class FeedController extends FormController
                         'viewParameters'  => $viewParameters,
                         'contentTemplate' => $template,
                         'passthroughVars' => [
-                            'activeLink'    => '#mautic_campaign_index',
-                            'mauticContent' => 'campaign',
+                            'activeLink'    => '#mautic_feed_index',
+                            'mauticContent' => 'feed',
                         ],
                     ]
                 );
@@ -409,5 +409,116 @@ class FeedController extends FormController
         if($entity) {
             $model->deleteEntity($entity);
         }
+    }
+
+    public function editAction($objectId)
+    {
+        /** @var FeedModel $model */
+        $model = $this->getModel('feed');
+
+        $entity = $model->getEntity($objectId);
+
+        if (!$this->get('mautic.security')->isGranted('campaign:campaigns:edit')) {
+            return $this->accessDenied();
+        }
+
+        //set the page we came from
+        $page = $this->get('session')->get('mautic.feed.page', 1);
+
+        //setup the form
+        $action = $this->generateUrl('mautic_feed_action', ['objectAction' => 'edit', 'objectId' => $objectId]);
+        $form   = $model->createForm($entity, $this->get('form.factory'), $action);
+
+        $feedSegments = $this->request->request->get('feed')['leadLists'];
+
+        ///Check for a submitted form and process it
+        if ($this->request->getMethod() == 'POST') {
+            $valid = false;
+            if (!$cancelled = $this->isFormCancelled($form)) {
+                if ($valid = $this->isFormValid($form)) {
+                    //make sure that at least one segment is selected
+                    if (empty($feedSegments)) {
+                        //set the error
+                        $form->addError(
+                            new FormError(
+                                'Selecione pelo menos um Segmento'
+                            )
+                        );
+                        $valid = false;
+                    } else {
+                        // Persist to the database before building connection so that IDs are available
+                        $model->saveEntity($entity);
+
+                        $this->addFlash(
+                            'mautic.core.notice.updated',
+                            [
+                                '%name%' => $entity->getName(),
+                                '%menu_link%' => 'mautic_feed_index',
+                                '%url%' => $this->generateUrl(
+                                    'mautic_feed_action',
+                                    [
+                                        'objectAction' => 'edit',
+                                        'objectId' => $entity->getId(),
+                                    ]
+                                ),
+                            ]
+                        );
+
+                        if ($form->get('buttons')->get('save')->isClicked()) {
+                            $viewParameters = [
+                                'objectAction' => 'view',
+                                'objectId' => $entity->getId(),
+                            ];
+                            $returnUrl = $this->generateUrl('mautic_feed_action', $viewParameters);
+                            $template = 'FeedBundle:Feed:view';
+                        } else {
+                            //return edit view so that all the session stuff is loaded
+                            return $this->editAction($entity->getId(), true);
+                        }
+                    }
+                }
+            } else {
+                $viewParameters = ['page' => $page];
+                $returnUrl = $this->generateUrl('mautic_feed_index', $viewParameters);
+                $template = 'FeedBundle:Feed:index';
+            }
+
+            if ($cancelled || ($valid && $form->get('buttons')->get('save')->isClicked())) {
+
+                return $this->postActionRedirect(
+                    [
+                        'returnUrl' => $returnUrl,
+                        'viewParameters' => $viewParameters,
+                        'contentTemplate' => $template,
+                        'passthroughVars' => [
+                            'activeLink' => '#mautic_feed_index',
+                            'mauticContent' => 'feed',
+                        ],
+                    ]
+                );
+            }
+        }
+
+        return $this->delegateView(
+            [
+                'viewParameters' => [
+                    'tmpl'            => $this->request->isXmlHttpRequest() ? $this->request->get('tmpl', 'index') : 'index',
+                    'entity'          => $entity,
+                    'form'            => $form->createView(),
+                ],
+                'contentTemplate' => 'FeedBundle:Feed:form.html.php',
+                'passthroughVars' => [
+                    'activeLink'    => '#mautic_feed_index',
+                    'mauticContent' => 'feed',
+                    'route'         => $this->generateUrl(
+                        'mautic_feed_action',
+                        [
+                            'objectAction' => (!empty($valid) ? 'edit' : 'new'), //valid means a new form was applied
+                            'objectId'     => $entity->getId(),
+                        ]
+                    ),
+                ],
+            ]
+        );
     }
 }
