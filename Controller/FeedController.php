@@ -305,21 +305,6 @@ class FeedController extends FormController
         /** @var EmailModel $emailModel */
         $emailModel = $this->getModel('email');
 
-        /** @var Article $article */
-        foreach($entity->getArticles() as $article) {
-            if($article->getTitle() == 'O que fazer para receber leads de seguro de carro') {
-                $article->setUrl('http://bannet.com.br/o-que-fazer-para-receber-leads-de-seguro-de-carro/');
-                $model->getArticleRepository()->saveEntity($article);
-            }elseif($article->getTitle() == 'Descubra como vender mais planos de saúde') {
-                $article->setUrl('http://bannet.com.br/descubra-como-vender-mais-planos-de-saude-2/');
-                $model->getArticleRepository()->saveEntity($article);
-            }
-        }
-        die();
-
-        $articleRepo = $model->getRepository()->saveEntity($entity->getArticles());
-
-
         $trackables = $emailModel->getEmailClickStats($entity->getEmail()->getId());
 
         /** @var Article $article */
