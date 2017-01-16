@@ -321,7 +321,7 @@ class FeedController extends FormController
 
             foreach($trackables as $key => $link) {
                 if($article->getUrl() == $link['url']) {
-                    $countEmailsClicados += $link['unieque_hits'];
+                    $countEmailsClicados += $link['unique_hits'];
                     unset($trackables[$key]);
                     break;
                 }
