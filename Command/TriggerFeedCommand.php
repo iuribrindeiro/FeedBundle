@@ -36,7 +36,7 @@ class TriggerFeedCommand extends ModeratedCommand
 
         /** @var FeedModel $feedModel */
         $feedModel = $container->get('mautic.feed.model.feed');
-
+	$output->writeln('<info>teste 1</info>');	
         $envio = $feedModel->sendFeed();
 
         if($envio) {
@@ -50,7 +50,8 @@ class TriggerFeedCommand extends ModeratedCommand
             $this->completeRun();
             return 0;
         }catch (\Exception $exception) {
-            return 0;
+           $output->writeln('<info>teste</info>');
+           return 0;
         }
     }
 }

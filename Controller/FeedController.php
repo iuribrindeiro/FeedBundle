@@ -314,8 +314,10 @@ class FeedController extends FormController
             $countEmailsClicados = 0;
             /** @var Stat $stat */
             foreach($article->getStats() as $stat) {
-                if($stat->isRead()) {
-                    $countEmailsLids++;
+		if($stat->getLead()) {
+	           if($stat->isRead()) {
+                     $countEmailsLids++;
+    		   }
                 }
             }
 

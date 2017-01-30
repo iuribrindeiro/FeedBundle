@@ -96,7 +96,7 @@ class FeedModel extends CommonFormModel
 
                 $objArticles[] = (new Article())->setTitle($feed->getTitle())
                                     ->setFeed($objFeed)->setDateSent($feed->getLastModified())
-                                    ->setUrl($feed->getUrl());
+                                    ->setUrl($feed->getLink());
 
                 foreach($objFeed->getLeadLists() as $leadList) {
                     /** @var ListLead $lead */
@@ -153,6 +153,7 @@ class FeedModel extends CommonFormModel
             }
             return null;
         } catch (\Exception $ex) {
+		print $ex->getMessage();
             $this->logger->addError(
                 $ex->getMessage(),
                 ['exception' => $ex]

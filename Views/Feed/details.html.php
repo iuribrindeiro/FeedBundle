@@ -90,6 +90,7 @@ $view['slots']->set(
                                                         <div class="list-group-item bg-auto bg-light-xs hidden" data-id-article="<?= $article->getId() ?>" name="detalhes-article">
                                                             <?php /** @var \Mautic\EmailBundle\Entity\Stat $stat */
                                                             foreach($article->getStats() as $stat): ?>
+								<?php if($stat->getLead()): ?>
                                                                 <?php if($stat->isRead()) {
                                                                     $class = 'success';
                                                                 }else {
@@ -110,6 +111,7 @@ $view['slots']->set(
                                                                         <?= $stat->isRead() ? 'Sim' : 'Não'?>
                                                                     </div>
                                                                 </div>
+								<?php endif; ?>
                                                             <?php endforeach; ?>
                                                         </div>
                                                     </li>
