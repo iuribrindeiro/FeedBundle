@@ -16,6 +16,7 @@ use Mautic\LeadBundle\Entity\LeadList;
 use MauticPlugin\FeedBundle\Entity\Feed;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -89,6 +90,29 @@ class FeedType extends AbstractType
                     'label' => 'Email',
                     'label_attr' => ['class' => 'control-label'],
                     'required' => true,
+                ]
+            )->add(
+                'logoEmail',
+                FileType::class,
+                [
+                    'attr' => [
+                        'value' => $options['data']->getLogoEmail() ? $options['data']->getLogoEmail()->getPath() : null,
+                        'class' => 'form-control'
+                    ],
+                    'label' => 'Imagem de Logo do Email',
+                    'label_attr' => ['class' => 'control-label'],
+                ]
+            )->add(
+                'urlSite',
+                TextType::class,
+                [
+                    'attr' => [
+                        'value' => $options['data']->getUrlSite(),
+                        'class' => 'form-control',
+                    ],
+                    'required' => true,
+                    'label' => 'Seu Site',
+                    'label_attr' => ['class' => 'control-label'],
                 ]
             );
 

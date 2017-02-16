@@ -3,7 +3,7 @@
 return [
     'name'        => 'Feed Bundle',
     'description' => 'Create a feed with a list of clients',
-    'version'     => '7.0',
+    'version'     => '7.4',
     'author'      => 'Iuri',
 
     'menu' => [
@@ -26,6 +26,16 @@ return [
             'mautic_feed_action' => [
                 'path' => '/feeds/{objectAction}/{objectId}',
                 'controller' => 'FeedBundle:Feed:execute'
+            ]
+        ],
+        'public' => [
+            'mautic_public_unsubscribe_index' => [
+                'path' => '/feed/index/{feedId}',
+                'controller' => 'FeedBundle:Public:index'
+            ],
+            'mautic_public_unsubscribe' => [
+                'path' => '/feed/unsubscribe/{feedId}',
+                'controller' => 'FeedBundle:Public:unsubscribe'
             ]
         ]
     ],

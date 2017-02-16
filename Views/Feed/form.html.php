@@ -11,6 +11,7 @@
 $view->extend('MauticCoreBundle:Default:content.html.php');
 $view['slots']->set('mauticContent', 'feed');
 
+/** @var \MauticPlugin\FeedBundle\Entity\Feed $entity */
 $header = ($entity->getId()) ?
     'Editar Feed ' . $entity->getName() :
     'Novo Feed';
@@ -28,7 +29,12 @@ $view['slots']->set('headerTitle', $header);
                     <?php
                     echo $view['form']->row($form['name']);
                     echo $view['form']->row($form['urlFeed']);
+                    echo $view['form']->row($form['logoEmail']);
+                    echo $view['form']->row($form['urlSite']);
                     ?>
+                    <?php if($entity->getLogoEmail()): ?>
+                        <img class="col-md-12" src="/<?= $entity->getLogoEmail()->getPathname() ?>" alt="">
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

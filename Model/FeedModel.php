@@ -22,9 +22,9 @@ use MauticPlugin\FeedBundle\Entity\Article;
 use MauticPlugin\FeedBundle\Entity\ArticleRepository;
 use MauticPlugin\FeedBundle\Entity\Feed;
 use MauticPlugin\FeedBundle\Entity\FeedRepository;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use MauticPlugin\FeedBundle\Entity\UnsubscribedLead;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\Templating\PhpEngine;
 
 class FeedModel extends CommonFormModel
 {
@@ -38,6 +38,9 @@ class FeedModel extends CommonFormModel
     private $emailModel;
 
     private $engine;
+
+    /** @var  FeedRepository */
+    private $repository;
 
     public function __construct(ListModel $leadListModel, FormModel $formModel, EmailModel $emailModel, $engine)
     {
@@ -67,7 +70,10 @@ class FeedModel extends CommonFormModel
      */
     public function getRepository()
     {
-        return $this->em->getRepository('FeedBundle:Feed');
+        if (!$this->repository) {
+            $this->repository = $this->em->getRepository('FeedBundle:Feed');
+        }
+        return $this->repository;
     }
 
     public function sendEmailFeed(array $objFeeds)
@@ -79,6 +85,9 @@ class FeedModel extends CommonFormModel
 
         /** @var Feed[] $objFeeds */
         foreach($objFeeds as $objFeed) {
+            if ($objFeed->getLogoEmail()) {
+                $objFeed->setLogoEmail(new File('media/images/' . $objFeed->getLogoEmail()));
+            }
             $feedIo = Factory::create()->getFeedIo();
             $onlyOne = false;
             if ($objFeed->getLastSend()) {
@@ -103,12 +112,15 @@ class FeedModel extends CommonFormModel
                     foreach($leadList->getLeads() as $lead) {
                         /** @var Lead $objLead */
                         $objLead = $lead->getLead();
-                        $id = $objLead->getId();
-                        $fields = $this->em->getRepository(Lead::class)->getFieldValues($objLead->getId());
-                        $objLead->setFields($fields);
-                        $emailLead = $objLead->getEmail();
-                        $firstname = $objLead->getName();
-                        $dadosLeads[$id] = ['id' => $id, 'email' => $emailLead, 'firstname' => $firstname, 'lastname' => ''];
+                        $unsubLead = $this->em->getRepository(UnsubscribedLead::class)->findOneBy(['lead' => $objLead, 'feed' => $objFeed]);
+                        if (!$unsubLead) {
+                            $id = $objLead->getId();
+                            $fields = $this->em->getRepository(Lead::class)->getFieldValues($objLead->getId());
+                            $objLead->setFields($fields);
+                            $emailLead = $objLead->getEmail();
+                            $firstname = $objLead->getName();
+                            $dadosLeads[$id] = ['id' => $id, 'email' => $emailLead, 'firstname' => $firstname, 'lastname' => ''];
+                        }
                     }
                 }
                 $feedsToSendEmail[] = $feed;
@@ -120,7 +132,10 @@ class FeedModel extends CommonFormModel
 
             if(isset($email) && isset($dadosLeads) && isset($objArticles)) {
                 $newArticles = true;
-                $email->setCustomHtml($this->engine->render('FeedBundle:Feed:email-feed.html.php', ['feeds' => $feedsToSendEmail]));
+
+                $email->setCustomHtml($this->engine->render('FeedBundle:Feed:email-feed.html.php',
+                    ['feeds' => $feedsToSendEmail, 'objFeed' => $objFeed]));
+
                 $this->emailModel->sendEmail($email, $dadosLeads, ['ignoreDNC' => true, 'sendBatchMail' => true]);
 
                 $objStats = $articleRepo->getNewStats($objFeed->getEmail()->getId());
@@ -159,6 +174,44 @@ class FeedModel extends CommonFormModel
                 ['exception' => $ex]
             );
             return false;
+        }
+    }
+
+    public function leadSubscribedToFeed($lead, $feed)
+    {
+        if (!$lead instanceof Lead) {
+            $lead = $this->em->getRepository(Lead::class)
+                ->findOneBy(['id' => $lead]);
+        }
+
+        if (!$feed instanceof Feed) {
+            $feed = $this->getEntity($feed);
+        }
+
+        if ($feed && $lead) {
+            return $this->getRepository()->getFeedsByLead($lead, $feed);
+        }
+
+        return null;
+    }
+
+    public function unsubscribeLead($feedId, $leadId)
+    {
+        $objFeed = $this->getEntity($feedId);
+        /** @var Lead|null $objLead */
+        $objLead = $this->em->getRepository(Lead::class)->findOneBy(['id' => $leadId]);
+
+        if ($objLead && $objFeed) {
+            $objUnsubscribed = $this->em->getRepository(UnsubscribedLead::class)
+                ->findOneBy(['feed' => $objFeed, 'lead' => $objLead]);
+            if (!$objUnsubscribed) {
+                $this->em->persist(
+                    (new UnsubscribedLead())
+                        ->setFeed($objFeed)
+                        ->setLead($objLead)
+                );
+                $this->em->flush();
+            }
         }
     }
 

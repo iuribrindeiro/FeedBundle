@@ -9,6 +9,7 @@ use Mautic\EmailBundle\Entity\Email;
 
 use Mautic\EmailBundle\Entity\Stat;
 use Mautic\LeadBundle\Entity\LeadList;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
@@ -32,6 +33,12 @@ class Feed
     /** @var  \DateTime */
     private $lastSend;
 
+    /** @var  string */
+    private $logoEmail;
+
+    /** @var  string */
+    private $urlSite;
+
     public static function loadMetadata(ORM\ClassMetadata $metadata)
     {
         $builder = new ClassMetadataBuilder($metadata);
@@ -43,8 +50,9 @@ class Feed
 
         $builder->addNamedField('name', 'string', 'name');
         $builder->addNamedField('urlFeed', 'string', 'url_feed');
-
         $builder->addNamedField('lastSend', 'datetime', 'last_send', true);
+        $builder->addNamedField('logoEmail', 'string', 'logo_email', true);
+        $builder->addNamedField('urlSite', 'string', 'url_site', true);
 
         $builder->createManyToMany('leadLists', LeadList::class)
             ->setJoinTable('feed_lead_list_xrfe')
@@ -223,5 +231,41 @@ class Feed
     public function convertToArray()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return File
+     */
+    public function getLogoEmail()
+    {
+        return $this->logoEmail;
+    }
+
+    /**
+     * @param string $logoEmail
+     * @return Feed
+     */
+    public function setLogoEmail($logoEmail)
+    {
+        $this->logoEmail = $logoEmail;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlSite()
+    {
+        return $this->urlSite;
+    }
+
+    /**
+     * @param string $urlSite
+     * @return Feed
+     */
+    public function setUrlSite($urlSite)
+    {
+        $this->urlSite = $urlSite;
+        return $this;
     }
 }

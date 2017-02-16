@@ -19,6 +19,8 @@ use MauticPlugin\FeedBundle\Entity\Article;
 use MauticPlugin\FeedBundle\Entity\Feed;
 use MauticPlugin\FeedBundle\Model\FeedModel;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FeedController extends FormController
 {
@@ -429,7 +431,12 @@ class FeedController extends FormController
 
         //setup the form
         $action = $this->generateUrl('mautic_feed_action', ['objectAction' => 'edit', 'objectId' => $objectId]);
-        $form   = $model->createForm($entity, $this->get('form.factory'), $action);
+
+        if ($entity->getLogoEmail()) {
+            $entity->setLogoEmail(new File($this->getParameter('mautic.image_path') . '/' . $entity->getLogoEmail()));
+        }
+
+        $form = $model->createForm($entity, $this->get('form.factory'), $action);
 
         $feedSegments = $this->request->request->get('feed')['leadLists'];
 
@@ -448,6 +455,15 @@ class FeedController extends FormController
                         );
                         $valid = false;
                     } else {
+                        /** @var UploadedFile $logoEmail */
+                        if ($logoEmail = $entity->getLogoEmail()) {
+                            $fileName = md5(uniqid()).'.'.$logoEmail->guessExtension();
+                            $logoEmail->move(
+                                $this->getParameter('mautic.image_path'),
+                                $fileName
+                            );
+                            $entity->setLogoEmail($fileName);
+                        }
                         // Persist to the database before building connection so that IDs are available
                         $model->saveEntity($entity);
 
