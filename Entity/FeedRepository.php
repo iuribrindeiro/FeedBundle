@@ -9,9 +9,6 @@
 
 namespace MauticPlugin\FeedBundle\Entity;
 
-
-use Doctrine\ORM\Query\Expr\Join;
-use Mautic\CampaignBundle\Entity\Lead;
 use Mautic\CoreBundle\Entity\CommonRepository;
 use Mautic\LeadBundle\Entity\LeadList;
 
@@ -70,10 +67,10 @@ class FeedRepository extends CommonRepository
 
         $qb->select('f')
             ->from(Feed::class, 'f')
-            ->innerJoin(LeadList::class, 'll')
+            ->join(LeadList::class, 'll')
             ->where(':lead MEMBER OF ll.leads')
-            ->andWhere($qb->expr()->eq('f', ':feed'))
-            ->setParameter('feed', $feed)
+//            ->andWhere($qb->expr()->eq('f', ':feed'))
+//            ->setParameter('feed', $feed)
             ->setParameter('lead', $lead)
             ->setMaxResults(1);
 
