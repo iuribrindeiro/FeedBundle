@@ -36,7 +36,7 @@ class PublicController extends FormController
         $feed = $feedModel->getEntity($feedId);
 
         if ($feed->getLogoEmail()) {
-            $feed->setLogoEmail(new File($this->getParameter('mautic.image_path') . '/' . $feed->getLogoEmail()));
+            $feed->setLogoEmail($feed->getLogoEmail());
         }
 
 
