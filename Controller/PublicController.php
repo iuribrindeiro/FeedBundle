@@ -36,7 +36,7 @@ class PublicController extends FormController
         $feed = $feedModel->getEntity($feedId);
 
         if ($feed->getLogoEmail()) {
-            $feed->setLogoEmail($feed->getLogoEmail());
+            $feed->setLogoEmail(new File($feed->getLogoEmail()));
         }
 
 
