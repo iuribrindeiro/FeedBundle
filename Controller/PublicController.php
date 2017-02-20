@@ -23,7 +23,7 @@ class PublicController extends FormController
         $feedModel = $this->getModel('feed');
         /** @var LeadModel $leadModel */
         $leadModel = $this->getModel('lead');
-        $lead = $leadModel->getEntity(32);
+        $lead = $leadModel->getCurrentLead();
 
         $url = $this->generateUrl(
             'mautic_public_unsubscribe',
