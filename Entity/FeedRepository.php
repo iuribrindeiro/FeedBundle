@@ -10,7 +10,9 @@
 namespace MauticPlugin\FeedBundle\Entity;
 
 use Mautic\CoreBundle\Entity\CommonRepository;
+use Mautic\LeadBundle\Entity\Lead;
 use Mautic\LeadBundle\Entity\LeadList;
+use Mautic\LeadBundle\Entity\LeadListRepository;
 
 class FeedRepository extends CommonRepository
 {
@@ -61,22 +63,25 @@ class FeedRepository extends CommonRepository
         }
     }
 
-    public function getFeedsByLead($lead, $feed)
+    public function leadSubscribedToFeed($lead, $feed)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $qb->select('f')
+        $qb->select('ll')
             ->from(Feed::class, 'f')
-            ->join(LeadList::class, 'll')
-            ->where(':lead MEMBER OF ll.leads')
-//            ->andWhere($qb->expr()->eq('f', ':feed'))
-//            ->setParameter('feed', $feed)
-            ->setParameter('lead', $lead)
-            ->setMaxResults(1);
+            ->innerJoin(LeadList::class, 'll', 'WITH',
+                'll MEMBER OF f.leadLists')
+            ->innerJoin('ll.leads', 'il', 'WITH',
+                'il.lead = :lead')
+            ->where($qb->expr()->eq('f', ':feed'))
+            ->andWhere($qb->expr()->eq('il.manuallyRemoved', ':false'))
+            ->setParameter('false', false, 'boolean')
+            ->setParameter('feed', $feed)
+            ->setParameter('lead', $lead);
 
         $result = $qb->getQuery()->getResult();
 
-        return reset($result);
+        return count($result) ? true : false;
     }
 
     public function getFeeds()

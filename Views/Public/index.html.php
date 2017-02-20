@@ -12,8 +12,7 @@
             </blockquote>
             <h4 class="mt-5">
                 <strong>
-                    Você será removido da lista de emails do "<?= $feed->getName(); ?>",
-                    então, não receberá mais notificações de novos artigos no nosso blog
+                    Você será removido da lista de emails do "<?= $feed->getName(); ?>" e não receberá mais notificações de novos artigos no nosso blog
                 </strong>
             </h4>
             <div class="mt-5">

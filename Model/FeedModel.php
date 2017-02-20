@@ -189,7 +189,7 @@ class FeedModel extends CommonFormModel
         }
 
         if ($feed && $lead) {
-            return $this->getRepository()->getFeedsByLead($lead, $feed);
+            return $this->getRepository()->leadSubscribedToFeed($lead, $feed);
         }
 
         return null;

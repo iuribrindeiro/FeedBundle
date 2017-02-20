@@ -23,7 +23,7 @@ class PublicController extends FormController
         $feedModel = $this->getModel('feed');
         /** @var LeadModel $leadModel */
         $leadModel = $this->getModel('lead');
-        $lead = $leadModel->getEntity(23);
+        $lead = $leadModel->getEntity(32);
 
         $url = $this->generateUrl(
             'mautic_public_unsubscribe',
@@ -36,7 +36,7 @@ class PublicController extends FormController
         $feed = $feedModel->getEntity($feedId);
 
         if ($feed->getLogoEmail()) {
-            //$feed->setLogoEmail(new File($this->getParameter('mautic.image_path') . '/' . $feed->getLogoEmail()));
+            $feed->setLogoEmail(new File($this->getParameter('mautic.image_path') . '/' . $feed->getLogoEmail()));
         }
 
 
