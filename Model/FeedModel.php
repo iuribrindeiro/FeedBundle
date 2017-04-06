@@ -92,6 +92,18 @@ class FeedModel extends CommonFormModel
             $onlyOne = false;
             if ($objFeed->getLastSend()) {
                 $feeds = $feedIo->readSince($objFeed->getUrlFeed(), $objFeed->getLastSend());
+                $feeds = $feeds->getFeed()->getElementIterator()->count();
+                if ($feeds->getFeed()->count() < 2) {
+                    $olderDate = date_sub($objFeed->getLastSend(), new \DateInterval('P14D'));
+                    $olderFeeds = $feedIo->readSince($objFeed->getUrlFeed(), $olderDate);
+                    foreach ($olderFeeds->getFeed()->getAllElements() as $itemFeed) {
+                        $feeds->getFeed()->getAllElements()->append($itemFeed);
+
+                        if ($feeds->getFeed()->count() == 3) {
+                            break;
+                        }
+                    }
+                }
             } else {
                 $onlyOne = true;
                 $feeds = $feedIo->read($objFeed->getUrlFeed());
@@ -136,7 +148,7 @@ class FeedModel extends CommonFormModel
                 $email->setCustomHtml($this->engine->render('FeedBundle:Feed:email-feed.html.php',
                     ['feeds' => $feedsToSendEmail, 'objFeed' => $objFeed]));
 
-                $this->emailModel->sendEmail($email, $dadosLeads, ['ignoreDNC' => true, 'sendBatchMail' => true]);
+                $this->emailModel->sendEmail($email, $dadosLeads, ['sendBatchMail' => true]);
 
                 $objStats = $articleRepo->getNewStats($objFeed->getEmail()->getId());
 
