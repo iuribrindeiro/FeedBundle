@@ -92,13 +92,11 @@ class FeedModel extends CommonFormModel
             $onlyOne = false;
             if ($objFeed->getLastSend()) {
                 $feeds = $feedIo->readSince($objFeed->getUrlFeed(), $objFeed->getLastSend());
-                $feeds = $feeds->getFeed()->getElementIterator()->count();
                 if ($feeds->getFeed()->count() < 2) {
-                    $olderDate = date_sub($objFeed->getLastSend(), new \DateInterval('P14D'));
+                    $olderDate = date_sub($objFeed->getLastSend(), new \DateInterval('P20D'));
                     $olderFeeds = $feedIo->readSince($objFeed->getUrlFeed(), $olderDate);
-                    foreach ($olderFeeds->getFeed()->getAllElements() as $itemFeed) {
-                        $feeds->getFeed()->getAllElements()->append($itemFeed);
-
+                    foreach ($olderFeeds->getFeed() as $itemFeed) {
+                        $feeds->getFeed()->add($itemFeed);
                         if ($feeds->getFeed()->count() == 3) {
                             break;
                         }
