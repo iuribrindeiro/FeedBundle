@@ -85,19 +85,17 @@ class FeedModel extends CommonFormModel
 
         /** @var Feed[] $objFeeds */
         foreach($objFeeds as $objFeed) {
-            if ($objFeed->getLogoEmail()) {
-                $objFeed->setLogoEmail(new File('media/images/' . $objFeed->getLogoEmail()));
-            }
             $feedIo = Factory::create()->getFeedIo();
             $onlyOne = false;
             if ($objFeed->getLastSend()) {
                 $feeds = $feedIo->readSince($objFeed->getUrlFeed(), $objFeed->getLastSend());
-                if ($feeds->getFeed()->count() < 2) {
-                    $olderDate = date_sub($objFeed->getLastSend(), new \DateInterval('P20D'));
+                $countItens = iterator_count($feeds->getFeed());
+                if ($countItens <= 2 && $countItens !== 0) {
+                    $olderDate = date_sub($objFeed->getLastSend(), new \DateInterval('P30D'));
                     $olderFeeds = $feedIo->readSince($objFeed->getUrlFeed(), $olderDate);
                     foreach ($olderFeeds->getFeed() as $itemFeed) {
                         $feeds->getFeed()->add($itemFeed);
-                        if ($feeds->getFeed()->count() == 3) {
+                        if (iterator_count($feeds->getFeed())== 3) {
                             break;
                         }
                     }
@@ -143,12 +141,21 @@ class FeedModel extends CommonFormModel
             if(isset($email) && isset($dadosLeads) && isset($objArticles)) {
                 $newArticles = true;
 
+                if ($objFeed->getLogoEmail()) {
+                    $nameLogoEmail = $objFeed->getLogoEmail();
+                    $objFeed->setLogoEmail(new File("media/images/" . $objFeed->getLogoEmail()));
+                }
+
                 $email->setCustomHtml($this->engine->render('FeedBundle:Feed:email-feed.html.php',
                     ['feeds' => $feedsToSendEmail, 'objFeed' => $objFeed]));
 
                 $this->emailModel->sendEmail($email, $dadosLeads, ['sendBatchMail' => true]);
 
                 $objStats = $articleRepo->getNewStats($objFeed->getEmail()->getId());
+
+                if (isset($nameLogoEmail)) {
+                    $objFeed->setLogoEmail($nameLogoEmail);
+                }
 
                 if(count($objStats) > 0) {
                     foreach($objArticles as $article) {
