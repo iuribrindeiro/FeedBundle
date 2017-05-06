@@ -129,7 +129,7 @@ $feeds;
                                         <tr>
                                             <td width="100%" style="font-size: 23px; color: rgb(255, 83, 53); text-align: left; font-family: proxima_nova_rgregular, Helvetica, Arial, sans-serif; line-height: 32px; vertical-align: top; "class="textCenter" >
                                                 <?php $primeiroFeed = array_shift($feeds); ?>
-                                                <p ><?= $primeiroFeed->getTitle(); ?></p>
+                                                <a href="<?= $feed->getLink(); ?>"><?= $primeiroFeed->getTitle(); ?></a>
                                             </td>
                                         </tr>
                                         <tr>
@@ -258,7 +258,7 @@ $feeds;
                                                         <table width="260" border="0" cellpadding="0" cellspacing="0" align="center" class="fullCenter">
                                                             <tbody><tr>
                                                                 <td width="100%" style="font-size: 23px; text-align: left; font-family: proxima_nova_rgregular, Helvetica, Arial, sans-serif; line-height: 30px; vertical-align: top; color: rgb(255, 83, 53); "mc:edit="68">
-                                                                    <p ><?= $feed->getTitle(); ?></p>
+                                                                    <a href="<?= $feed->getLink(); ?>"><?= $feed->getTitle(); ?></a>
                                                                 </td>
                                                             </tr>
 <!--                                                            <tr>-->
