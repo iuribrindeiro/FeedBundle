@@ -129,7 +129,7 @@ $feeds;
                                         <tr>
                                             <td width="100%" style="font-size: 23px; color: rgb(255, 83, 53); text-align: left; font-family: proxima_nova_rgregular, Helvetica, Arial, sans-serif; line-height: 32px; vertical-align: top; "class="textCenter" >
                                                 <?php $primeiroFeed = array_shift($feeds); ?>
-                                                <a href="<?= $feed->getLink(); ?>"><?= $primeiroFeed->getTitle(); ?></a>
+                                                <a href="<?= $primeiroFeed->getLink(); ?>"><?= $primeiroFeed->getTitle(); ?></a>
                                             </td>
                                         </tr>
                                         <tr>
